@@ -1,0 +1,16 @@
+{
+  "role": "SOFTWARE ENGINEER",
+  "headline": ["Hi, I'm ", "Dipti", " Ghiya"],
+  "bio": [
+    "I am a software engineer based in the San Francisco Bay Area, originally from Pune, India. I spent 5 years building backend systems at companies like Avalara and Accenture before moving to the US to pursue my Master's in Computer Engineering at SJSU. It was a big leap but the kind worth taking.",
+    "I genuinely enjoy solving problems that have real stakes, systems that handle real users, real data, and real consequences when something breaks. Lately I have been going deep on agentic AI and systems programming, building things that push me outside what I already know.",
+    "When I am not at my laptop I am cooking something new, exploring the Bay Area one neighborhood at a time, hiking a trail, or playing badminton. Basically anything that gets me away from the screen, until a new problem pulls me back."  ],
+  "interests": [
+    "Distributed Systems",
+    "Agentic AI",
+    "System Software",
+    "Cloud & DevOps",
+    "Computer Architecture",
+    "Backend Engineering"
+  ]
+}
