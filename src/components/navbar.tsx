@@ -1,17 +1,14 @@
 'use client';
 
 import { VscCode } from 'react-icons/vsc';
-import { MdWork } from 'react-icons/md';
 import { FaLinkedin, FaGithub } from 'react-icons/fa';
 import { FiUser } from 'react-icons/fi';
 
 
 export default function Navbar({
-  onResumeClick,
   onAboutClick,
   onProjectsClick,
 }: {
-  onResumeClick: () => void;
   onAboutClick: () => void;
   onProjectsClick: () => void;
 }) {
@@ -40,9 +37,6 @@ export default function Navbar({
     <button onClick={onProjectsClick} aria-label="Projects" style={{ display: 'flex', background: 'none', border: 'none', cursor: 'pointer', color: '#79b8ff' }}>
   <VscCode size={22} aria-hidden="true" />
 </button>
-      <button onClick={onResumeClick} aria-label="Open Resume" style={{ display: 'flex', background: 'none', border: 'none', cursor: 'pointer' }}>
-        <MdWork size={22} color="#f78166" aria-hidden="true" />
-      </button>
       <a href="https://www.linkedin.com/in/dipti-ghiya" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" style={{ display: 'flex', color: '#0a66c2' }}>
         <FaLinkedin size={22} aria-hidden="true" />
       </a>

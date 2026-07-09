@@ -10,6 +10,7 @@ type Project = {
   tags: string[];
   accent: string;
   emoji: string;
+  url?: string;
 };
 
 const PROJECTS: Project[] = [
@@ -21,7 +22,30 @@ const PROJECTS: Project[] = [
     accent: "#79b8ff",
     emoji: "🧠",
   },
+  {
+    id: "weekly-tracker",
+    title: "Weekly Tracker",
+    tagline: "A lightweight tracker for planning and reviewing the week. Live app.",
+    tags: ["Web App", "Next.js", "Live"],
+    accent: "#56d364",
+    emoji: "🗓️",
+    url: "https://weekly-tracker-lovat.vercel.app/",
+  },
 ];
+
+const cardStyle = (accent: string): React.CSSProperties => ({
+  textAlign: "left",
+  background: "#161b22",
+  border: `1px solid ${accent}33`,
+  borderRadius: "10px",
+  padding: "1rem",
+  cursor: "pointer",
+  color: "#e8e8e8",
+  fontFamily: "monospace",
+  transition: "border-color 0.18s, transform 0.18s",
+  display: "block",
+  textDecoration: "none",
+});
 
 export default function ProjectsWindow({ onClose }: { onClose: () => void }) {
   const [openProject, setOpenProject] = useState<string | null>(null);
@@ -96,57 +120,77 @@ export default function ProjectsWindow({ onClose }: { onClose: () => void }) {
               gap: "1rem",
             }}
           >
-            {PROJECTS.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => setOpenProject(p.id)}
-                aria-label={`Open ${p.title}`}
-                style={{
-                  textAlign: "left",
-                  background: "#161b22",
-                  border: `1px solid ${p.accent}33`,
-                  borderRadius: "10px",
-                  padding: "1rem",
-                  cursor: "pointer",
-                  color: "#e8e8e8",
-                  fontFamily: "monospace",
-                  transition: "border-color 0.18s, transform 0.18s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = `${p.accent}88`;
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = `${p.accent}33`;
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
-                  <span style={{ fontSize: "1.4rem" }}>{p.emoji}</span>
-                  <span style={{ color: p.accent, fontSize: "0.95rem", fontWeight: 700 }}>{p.title}</span>
-                </div>
-                <p style={{ color: "#aaa", fontSize: "0.78rem", lineHeight: 1.5, marginBottom: "0.7rem" }}>
-                  {p.tagline}
-                </p>
-                <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      style={{
-                        fontSize: "0.62rem",
-                        color: "#888",
-                        padding: "0.15rem 0.5rem",
-                        borderRadius: "999px",
-                        background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                      }}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </button>
-            ))}
+            {PROJECTS.map((p) => {
+              const inner = (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "0.6rem" }}>
+                    <span style={{ fontSize: "1.4rem" }}>{p.emoji}</span>
+                    <span style={{ color: p.accent, fontSize: "0.95rem", fontWeight: 700, flex: 1 }}>{p.title}</span>
+                    {p.url && (
+                      <span style={{ color: p.accent, fontSize: "0.85rem", opacity: 0.7 }}>↗</span>
+                    )}
+                  </div>
+                  <p style={{ color: "#aaa", fontSize: "0.78rem", lineHeight: 1.5, marginBottom: "0.7rem" }}>
+                    {p.tagline}
+                  </p>
+                  <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                    {p.tags.map((t) => (
+                      <span
+                        key={t}
+                        style={{
+                          fontSize: "0.62rem",
+                          color: "#888",
+                          padding: "0.15rem 0.5rem",
+                          borderRadius: "999px",
+                          background: "rgba(255,255,255,0.04)",
+                          border: "1px solid rgba(255,255,255,0.08)",
+                        }}
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              );
+
+              const hoverIn = (e: React.MouseEvent<HTMLElement>) => {
+                e.currentTarget.style.borderColor = `${p.accent}88`;
+                e.currentTarget.style.transform = "translateY(-2px)";
+              };
+              const hoverOut = (e: React.MouseEvent<HTMLElement>) => {
+                e.currentTarget.style.borderColor = `${p.accent}33`;
+                e.currentTarget.style.transform = "translateY(0)";
+              };
+
+              if (p.url) {
+                return (
+                  <a
+                    key={p.id}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${p.title} in a new tab`}
+                    style={cardStyle(p.accent)}
+                    onMouseEnter={hoverIn}
+                    onMouseLeave={hoverOut}
+                  >
+                    {inner}
+                  </a>
+                );
+              }
+              return (
+                <button
+                  key={p.id}
+                  onClick={() => setOpenProject(p.id)}
+                  aria-label={`Open ${p.title}`}
+                  style={cardStyle(p.accent)}
+                  onMouseEnter={hoverIn}
+                  onMouseLeave={hoverOut}
+                >
+                  {inner}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
