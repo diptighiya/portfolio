@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/navbar';
 import AboutWindow from '@/components/about_window';
 import ProjectsWindow from '@/components/project_window';
+import WaterEffect from '@/components/water_effect';
 
 export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
@@ -23,6 +24,7 @@ export default function Home() {
 
   return (
     <main aria-label="Dipti Ghiya Portfolio">
+      <WaterEffect />
       <Navbar
         onAboutClick={() => setShowAbout(true)}
         onProjectsClick={() => setShowProjects(true)}

@@ -402,7 +402,20 @@ function EventExplain({
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+/** Track viewport width so the layout can adapt without CSS media queries. */
+function useIsMobile(bp = 720) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= bp);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [bp]);
+  return isMobile;
+}
+
 export default function MemoryGame({ onClose }: { onClose: () => void }) {
+  const isMobile = useIsMobile();
   const [phase, setPhase] = useState<Phase>("boot");
   const [tutorialStep, setTutorialStep] = useState(0);
 
@@ -843,10 +856,12 @@ export default function MemoryGame({ onClose }: { onClose: () => void }) {
             <div
               style={{
                 display: "flex",
-                gap: "1.5rem",
+                gap: isMobile ? "0.6rem" : "1.5rem",
                 alignItems: "center",
                 marginRight: "12px",
-                fontSize: "0.82rem",
+                fontSize: isMobile ? "0.68rem" : "0.82rem",
+                flexWrap: "wrap",
+                justifyContent: "flex-end",
               }}
             >
               {gcPause > 0 && <span style={{ color: "#f78166", fontWeight: 700 }}>GC PAUSE {gcPause}s</span>}
@@ -909,17 +924,26 @@ export default function MemoryGame({ onClose }: { onClose: () => void }) {
 
         {/* Playing / Tutorial layout (same underlying view, tutorial adds overlay) */}
         {(phase === "playing" || phase === "tutorial") && (
-          <div style={{ flex: 1, display: "flex", overflow: "hidden", position: "relative" }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: isMobile ? "column" : "row",
+              overflow: isMobile ? "auto" : "hidden",
+              position: "relative",
+            }}
+          >
             {/* ── Left: Game Area ── */}
             <div
               style={{
                 flex: 1,
-                padding: "1rem",
+                padding: isMobile ? "0.7rem" : "1rem",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.8rem",
-                overflowY: "auto",
-                borderRight: "1px solid rgba(255,255,255,0.06)",
+                overflowY: isMobile ? "visible" : "auto",
+                borderRight: isMobile ? "none" : "1px solid rgba(255,255,255,0.06)",
+                borderBottom: isMobile ? "1px solid rgba(255,255,255,0.06)" : "none",
               }}
             >
               {/* Heat Map */}
@@ -1004,7 +1028,7 @@ export default function MemoryGame({ onClose }: { onClose: () => void }) {
                           }
                           onClick={() => !block.free && killProcess(block.id)}
                           style={{
-                            height: "34px",
+                            height: isMobile ? "24px" : "34px",
                             background: bg,
                             border: block.free
                               ? "1px dashed rgba(255,255,255,0.12)"
@@ -1023,7 +1047,8 @@ export default function MemoryGame({ onClose }: { onClose: () => void }) {
                             transition: "background 0.2s",
                           }}
                         >
-                          {label}
+                          {/* Inline cell labels are unreadable at mobile cell sizes; process list + hover card carry that info instead. */}
+                          {isMobile ? "" : label}
                         </div>
                       );
                     }
@@ -1402,10 +1427,10 @@ export default function MemoryGame({ onClose }: { onClose: () => void }) {
             {/* ── Right: System Log + Manual ── */}
             <div
               style={{
-                width: "240px",
-                minWidth: "240px",
-                padding: "1rem",
-                overflowY: "auto",
+                width: isMobile ? "100%" : "240px",
+                minWidth: isMobile ? undefined : "240px",
+                padding: isMobile ? "0.8rem" : "1rem",
+                overflowY: isMobile ? "visible" : "auto",
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
